@@ -1,7 +1,8 @@
 # web-crawler
-Currently a CLI. Takes a string query and a starting URL.
 
-Example:
+Takes a string query and a starting URL. This project includes a Java CLI as well as a small React app (WIP)
+
+Java CLI Example:
 ```
 Enter a string to search: banana
 Enter a starting URL: https://en.wikipedia.org/wiki/Main_Page
