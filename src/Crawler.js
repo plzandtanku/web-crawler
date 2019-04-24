@@ -8,11 +8,63 @@ class EmailSearch extends Component {
 		super(props);
 		this.state = {
 			startUrl: '',
+			urls: [],
+			emails:[1,2,3],
 		}
 	}	
 	handleChange(event) {
 		this.setState({
 			[event.target.name]: event.target.value,
+		});
+	}
+	renderEmails(){
+		let emailList = [];
+		this.state.emails.forEach(function(e){
+			emailList.push(<p key={e}>{e}</p>);
+		})
+		return (emailList);
+	}
+	search(event) {
+		console.log(this.state.startUrl);
+		let gib =[1,2,3,4];
+		this.setState({
+			emails: gib
+		});
+		return;
+		if (this.urls.length < 1) return;
+		let bypass = "https://cors-anywhere.herokuapp.com/";
+		let re = new RegExp("");
+		let url = this.urls[0];
+	//https://stackoverflow.com/questions/24710989/how-do-i-make-http-requests-inside-a-loop-in-nodejs
+		request(bypass+url, (err, res, body) => {
+			this.urls.shift();
+			//		console.log(url);
+			//	console.log(this.urls.length);
+			if (body.match(re)){
+				console.log("ya burnt");
+				console.log(url);
+				this.setState({
+					result : url
+				});
+
+				this.urls = [];
+				return url;
+			} 
+			else {
+				let test = document.createElement('html');
+				test.innerHTML = body;
+				let x = Array.from(test.getElementsByTagName('a'));
+				//	for (let i=0; i < x.length;i++){
+				if (x !== undefined && x.length > 0) {
+					for (let i=0; i < x.length;i++){
+						if (x[i].hasAttribute("href")) {
+							let link = x[i].getAttribute("href");
+							this.urls.push(link);
+						}
+					}
+				}
+			}
+			//this.search(q);
 		});
 	}
 	render() {
@@ -22,7 +74,10 @@ class EmailSearch extends Component {
 			Starting URL:
 			</label>
 			<input type="text" name="startUrl" value={this.state.startUrl} onChange={this.handleChange.bind(this)} />
-			<button onClick={this.search}>Search</button>
+			<button onClick={this.search.bind(this)}>Search</button>
+			<div>
+			{this.renderEmails()}
+			</div>
 			</div>
 		)
 	}
